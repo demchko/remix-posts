@@ -1,21 +1,25 @@
 import {Link, useLoaderData} from "@remix-run/react";
 import {Button} from "~/components/ui/button";
+import {db} from "~/utils/db.server";
 
 type Post = {
-    id:number;
+    id: string;
     title: string;
+    body?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 type Data = {
     posts: Post[]
 }
 
-export const loader = () => {
+export const loader = async() => {
     const data: Data = {
-        posts: [
-            {id:1, title: 'Post 1'},
-            {id:2, title: 'Post 2'},
-            {id:3, title: 'Post 3'},
-        ]
+        posts: await db.post.findMany({
+            take: 20,
+            select: {id: true, title: true, createdAt: true},
+            orderBy: {createdAt: 'desc'}
+        })
     }
 
     return data;
