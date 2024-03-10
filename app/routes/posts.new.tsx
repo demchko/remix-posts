@@ -4,14 +4,16 @@ import {Label} from "~/components/ui/label";
 import {Textarea} from "~/components/ui/textarea";
 import {Button} from "~/components/ui/button";
 import {ActionFunctionArgs} from "@remix-run/node";
+import {db} from "~/utils/db.server";
 
 export const action = async({request}: ActionFunctionArgs) => {
     const form = await request.formData();
     const title = form.get('title');
     const body = form.get('body');
 
-    console.log(form, title, body);
-    return redirect('/posts');
+    const fields = {title, body};
+    const post = await db.post.create({data: fields});
+    return redirect(`/posts/${post.id}`);
 }
 
 export default function NewPost(){
