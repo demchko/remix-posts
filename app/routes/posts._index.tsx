@@ -6,11 +6,19 @@ type Post = {
     id: string;
     title: string;
     body?: string;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
+type PostDB = {
+    id: string;
+    title: string;
+    body?: string;
     createdAt?: Date;
-    updatedAt?: Date;
+    updatedAt?: string;
 }
 type Data = {
-    posts: Post[]
+    posts: PostDB[]
 }
 
 export const loader = async() => {
@@ -35,9 +43,11 @@ export default function PostsIndex(){
             </div>
             {
                 posts.map((item: Post) => (
-                    <div key={item.id} className='transition-all duration-500  border border-white p-5 rounded-md mt-5 hover:border-purple-500 hover:cursor-pointer ' >
-                        <p>{item.title}</p>
-                    </div>
+                    <Link key={item.id}  to={`/posts/${item.id}`}>
+                        <div className='transition-all duration-500  border border-white p-5 rounded-md mt-5 hover:border-purple-500 hover:cursor-pointer ' >
+                            <p>{item.title}</p>
+                        </div>
+                    </Link>
                 ))
             }
         </div>
